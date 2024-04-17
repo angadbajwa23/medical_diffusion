@@ -59,9 +59,10 @@ class Diffusion:
 
 
 def train(args):
-    setup_logging(args.run_name)
+    # setup_logging(args.run_name)
     device = args.device
-    dataloader = get_data(args)
+    print("DEVICEE: ", device)
+    dataloader, val_loader = get_data(args)
     model = UNet().to(device)
     optimizer = optim.AdamW(model.parameters(), lr=args.lr)
     mse = nn.MSELoss()
@@ -97,11 +98,14 @@ def launch():
     args = parser.parse_args()
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 500
-    args.batch_size = 12
-    args.image_size = 64
-    args.dataset_path = r"C:\Users\dome\datasets\landscape_img_folder"
+    args.batch_size =4
+    args.image_size = 256
+    args.slice_size = 0
+    args.dataset_path = r"/content/drive/MyDrive/VLR Ham data"
+    args.train_folder, args.val_folder = "train", "val"
     args.device = "cuda"
     args.lr = 3e-4
+    args.num_workers = 2
     train(args)
 
 

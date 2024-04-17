@@ -1,12 +1,12 @@
 import os, random
 from pathlib import Path
-#from kaggle import api
+# from kaggle import api
 import torch
 import torchvision
 import torchvision.transforms as T
 import numpy as np
 from PIL import Image
-#from fastdownload import FastDownload
+from fastdownload import FastDownload
 from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader
 
@@ -91,21 +91,21 @@ def save_images(images, path, **kwargs):
 
 def get_data(args):
     train_transforms = torchvision.transforms.Compose([
-        T.Resize(args.img_size + int(.25*args.img_size)),  # args.img_size + 1/4 *args.img_size
-        T.RandomResizedCrop(args.img_size, scale=(0.8, 1.0)),
+        T.Resize(args.image_size),  # args.img_size + 1/4 *args.img_size
+        T.RandomResizedCrop(args.image_size, scale=(0.8, 1.0)),
         T.ToTensor(),
         T.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
     val_transforms = torchvision.transforms.Compose([
-        T.Resize(args.img_size),
+        T.Resize(args.image_size),
         T.ToTensor(),
         T.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
-
-    train_dataset = torchvision.datasets.ImageFolder(os.path.join(args.dataset_path, args.train_folder), transform=train_transforms)
-    val_dataset = torchvision.datasets.ImageFolder(os.path.join(args.dataset_path, args.val_folder), transform=val_transforms)
-    
+    print(os.path.join(args.dataset_path, args.train_folder))
+    print("###")
+    train_dataset = torchvision.datasets.ImageFolder(os.path.join(r"/content/drive/MyDrive/VLR Ham data", "train"), transform=train_transforms)
+    val_dataset = torchvision.datasets.ImageFolder(os.path.join(r"/content/drive/MyDrive/VLR Ham data", "val"), transform=val_transforms)
     if args.slice_size>1:
         train_dataset = torch.utils.data.Subset(train_dataset, indices=range(0, len(train_dataset), args.slice_size))
         val_dataset = torch.utils.data.Subset(val_dataset, indices=range(0, len(val_dataset), args.slice_size))
